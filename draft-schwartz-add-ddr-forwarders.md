@@ -160,7 +160,7 @@ NXDOMAIN Fallback is only applicable when a legacy DNS forwarder might be presen
 
 An "interposable domain" is a domain whose owner deliberately allows resolvers to forge certain responses.  This arrangement is most common for search engines, which often support a configuration where resolvers forge a CNAME record to direct all clients to a child-appropriate instance of the search engine {{DUCK-CNAME}}{{BING-CNAME}}{{GOOGLE-CNAME}}.
 
-Future deployments of interposable domains can instruct administrators to enable or disable DDR when adding the forged record, but legacy DNS forwarders will be bypassed if the client upgrades to an upstream resolver using DDR.
+Future deployments of interposable domains can instruct administrators to enable or disable DDR when adding the forged record, but forged records in legacy DNS forwarders could be lost due to a cross-forwarder upgrade.
 
 ### Mitigation: Exemption list
 
