@@ -44,9 +44,9 @@ This draft describes how the Discovery of Designated Resolvers (DDR) standard in
 
 # Conventions and Definitions
 
-Legacy DNS Forwarder - An apparent DNS resolver, known to the client only by a non-public IP address, that forwards the clients queries to an upstream resolver, and has not been updated with any knowledge of DDR.
+Legacy DNS Forwarder - An apparent DNS resolver, known to the client only by a non-public IP address, that forwards the client's queries to an upstream resolver, and has not been updated with any knowledge of DDR.
 
-Cross-Forwarder Upgrade - Establishment of a direct, encrypted connection between the client and the resolver to which the Legacy DNS Forwarder is forwarding DNS queries.
+Cross-Forwarder Upgrade - Establishment of a direct, encrypted connection between the client and the upstream resolver.
 
 # Introduction
 
@@ -60,7 +60,7 @@ On the topic of client validation of encrypted DNS transports, the DDR specifica
 
 As TLS certificates cannot cover non-public IP addresses, this prevents clients that are behind a legacy DNS forwarder from connecting directly to the upstream resolver ("cross-forwarder upgrade").
 
-Recent estimates suggest that a large fraction, perhaps a majority, of residential internet use in the United States and Europe relies on local DNS forwarders that are not compatible with DDR.
+Recent estimates suggest that a large fraction, perhaps a majority, of residential internet users in the United States and Europe rely on local DNS forwarders that are not compatible with DDR.
 
 ## Scope
 
@@ -70,11 +70,11 @@ DNS forwarders and resolvers that are implemented with awareness of DDR are out 
 
 # Relaxed validation client policy {#client-policy}
 
-We define a "relaxed validation" client policy as a client behavior that removes this requirement when the apparent DNS resolver is identified by a non-public IP address.  This client policy is otherwise identical to the one described in {{DDR}}.
+We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a non-public IP address, regardless of the Designated Resolver's IP address.  This client policy is otherwise identical to the one described in {{DDR}}.
 
 # Naturally compatible behaviors
 
-These network behaviors are naturally compatible with relaxed validation.
+The following network behaviors are naturally compatible with relaxed validation.
 
 ## Malware and threat domain filtering
 
@@ -114,7 +114,7 @@ This attack does not apply if the client and network implement support for Desig
 
 The client can choose to refresh the DDR record arbitrarily frequently, e.g. by limiting the TTL.  For example, by limiting the TTL to 5 minutes, a client could ensure that any attacker can continue to monitor queries for at most 5 minutes after they have left the local network.
 
-### Mitigation: Resolver reputation requirements
+### Mitigation: Resolver reputation
 
 A relaxed-validation client might choose to accept a cross-forwarder upgrade only if the designated encrypted resolver has sufficient reputation, according to some proprietary reputation scheme (e.g. a locally stored list of respectable resolvers).  This limits the ability of a DDR forgery attack to cause harm.
 
