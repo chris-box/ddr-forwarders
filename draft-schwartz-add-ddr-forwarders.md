@@ -2,7 +2,7 @@
 title: "Discovery of Designated Resolvers in the Presence of Legacy Forwarders"
 abbrev: "DDR and Forwarders"
 docname: draft-schwartz-add-ddr-forwarders-latest
-category: inf
+category: info
 
 ipr: trust200902
 area: General
@@ -38,13 +38,13 @@ informative:
 
 --- abstract
 
-This draft describes how the Discovery of Designated Resolvers (DDR) standard interacts with legacy DNS Forwarders, including potential incompatibilities and relevant mitigations.
+This draft describes how the Discovery of Designated Resolvers (DDR) standard interacts with legacy DNS forwarders, including potential incompatibilities and relevant mitigations.
 
 --- middle
 
 # Conventions and Definitions
 
-Legacy DNS Forwarder - An apparent DNS resolver, known to the client only by a non-public IP address, that has not been updated with any knowledge of DDR.
+Legacy DNS Forwarder - An apparent DNS resolver, known to the client only by a non-public IP address, that forwards the clients queries to an upstream resolver, and has not been updated with any knowledge of DDR.
 
 Cross-Forwarder Upgrade - Establishment of a direct, encrypted connection between the client and the resolver to which the Legacy DNS Forwarder is forwarding DNS queries.
 
@@ -96,7 +96,7 @@ The conservative validation policy results in no encryption when a legacy DNS fo
 
 The relaxed validation policy allows the use of encrypted transport in these configurations, reducing exposure to a passive surveillance adversary.
 
-# Security Considerations {#security-consideration}
+# Security Considerations {#security-considerations}
 
 The relaxed validation procedure ({{client-policy}}) offers similar security properties to the stricter validation described in {{DDR}}, when a DDR-enabled resolver is identified by a non-public IP address.  With either policy, the client can establish a secure connection to the resolver in the absence of an active attacker, but an active attacker can impersonate the resolver and intercept all queries.  However, there are some important differences in the security properties that result from these policies.
 
