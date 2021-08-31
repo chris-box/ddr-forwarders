@@ -144,7 +144,7 @@ Using DDR with legacy DNS forwarders also raises several potential concerns rela
 
 ## Split-horizon namespaces
 
-Some network resolvers contain additional names that are not resolvable in the global DNS.  If these local resolvers are also DNS forwarders, a relaxed validation client might lose the ability to resolve these local names.
+Some network resolvers contain additional names that are not resolvable in the global DNS.  If these local resolvers are also legacy DNS forwarders, a client that performs a cross-forwarder upgrade might lose access to these local names.
 
 ### Mitigation: NXDOMAIN Fallback
 
@@ -152,7 +152,7 @@ In "NXDOMAIN Fallback", the client repeats a query to the unencrypted resolver i
 
 This is similar to the fallback behavior currently deployed in Mozilla Firefox {{FIREFOX-FALLBACK}}.
 
-NXDOMAIN Fallback results in slight changes to the security and privacy properties of DDR.  Queries for nonexistent names no longer have protection against a local passive adversary, and local names are revealed to the upstream resolver.
+NXDOMAIN Fallback results in slight changes to the security and privacy properties of encrypted DNS.  Queries for nonexistent names no longer have protection against a local passive adversary, and local names are revealed to the upstream resolver.
 
 NXDOMAIN Fallback is only applicable when a legacy DNS forwarder might be present, i.e. the unencrypted resolver has a non-public IP address, and the encrypted resolver has a different IP address.  In the other DDR configurations, any local names are expected to resolve similarly on both resolvers.
 
