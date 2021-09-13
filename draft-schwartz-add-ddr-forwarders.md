@@ -108,7 +108,7 @@ With the relaxed validation behavior, a transient active attacker could implant 
 
 ### Solution: DNR
 
-This attack does not apply if the client and network implement support for Designated Network Resolvers {{?DNR=I-D.draft-ietf-add-dnr}}.
+This attack does not apply if the client and network implement support for Discovery of Network-designated Resolvers {{?DNR=I-D.draft-ietf-add-dnr}}.
 
 ### Mitigation: Frequent refresh
 
@@ -116,7 +116,7 @@ The client can choose to refresh the DDR record arbitrarily frequently, e.g. by 
 
 ### Mitigation: Resolver reputation
 
-A relaxed-validation client might choose to accept a cross-forwarder upgrade only if the designated encrypted resolver has sufficient reputation, according to some proprietary reputation scheme (e.g. a locally stored list of respectable resolvers).  This limits the ability of a DDR forgery attack to cause harm.
+A relaxed-validation client might choose to accept a potential cross-forwarder upgrade only if the designated encrypted resolver has sufficient reputation, according to some proprietary reputation scheme (e.g. a locally stored list of respectable resolvers).  This limits the ability of a DDR forgery attack to cause harm.
 
 ## Forensic logging
 
