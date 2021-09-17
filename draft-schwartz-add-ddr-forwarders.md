@@ -98,13 +98,13 @@ The relaxed validation policy allows the use of encrypted transport in these con
 
 # Security Considerations {#security-considerations}
 
-The relaxed validation procedure ({{client-policy}}) offers similar security properties to the stricter validation described in {{DDR}}, when a DDR-enabled resolver is identified by a non-public IP address.  With either policy, the client can establish a secure connection to the resolver in the absence of an active attacker, but an active attacker can impersonate the resolver and intercept all queries.  However, there are some important differences in the security properties that result from these policies.
+The relaxed validation procedure ({{client-policy}}) offers similar security properties to the stricter validation described in {{DDR}}, when a DDR-enabled resolver is identified by a non-public IP address.  With either policy, the client can establish a secure connection to the resolver in the absence of an active attacker, but an on-path attacker can impersonate the resolver and intercept all queries.  However, there are some important differences in the security properties that result from these policies.
 
 ## Transient attackers
 
-With the conservative validation policy, a transient active attacker can only intercept queries for the duration of their active presence on the network.
+With the conservative validation policy, a transient on-path attacker can only intercept queries for the duration of their active presence on the network.
 
-With the relaxed validation behavior, a transient active attacker could implant a long-lived DDR response in the client's cache, directing their queries to the attacker's server long after the attacker has left the network.
+With the relaxed validation behavior, a transient on-path attacker could implant a long-lived DDR response in the client's cache, directing their queries to the attacker's server long after the attacker has left the network.
 
 ### Solution: DNR
 
