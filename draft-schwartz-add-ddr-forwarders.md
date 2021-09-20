@@ -35,6 +35,16 @@ informative:
   GOOGLE-CNAME:
     target: https://support.google.com/websearch/answer/186669?hl=en
     title: Keep SafeSearch turned on for your school, workplace, or home network
+  MOZILLA-TRR:
+    target: https://wiki.mozilla.org/Security/DOH-resolver-policy#Mozilla_Policy_Requirements_for_DNS_over_HTTPs_Partners
+    title: Mozilla Policy Requirements for DNS over HTTPs Partners
+  CHROME-DOH:
+    target: https://docs.google.com/document/d/128i2YTV2C7T6Gr3I-81zlQ-_Lprnsp24qzy_20Z1Psw/edit
+    title: "DoH providers: criteria, process for Chrome"
+  MICROSOFT-DOH:
+    target: https://docs.microsoft.com/en-us/windows-server/networking/dns/doh-client-support#determine-which-doh-servers-are-on-the-known-server-list
+    title: Determine which DoH servers are on the known server list
+
 
 --- abstract
 
@@ -98,13 +108,15 @@ The relaxed validation policy allows the use of encrypted transport in these con
 
 # Security Considerations {#security-considerations}
 
-The relaxed validation procedure ({{client-policy}}) offers similar security properties to the stricter validation described in {{DDR}}, when a DDR-enabled resolver is identified by a non-public IP address.  With either policy, the client can establish a secure connection to the resolver in the absence of an active attacker, but an on-path attacker can impersonate the resolver and intercept all queries.  However, there are some important differences in the security properties that result from these policies.
+When the client uses the conservative validation policy described in {{DDR}}, and a DDR-enabled resolver is identified by a non-public IP address, the client can establish a secure DDR connection only in the absence of an active attacker.  An on-path attacker can impersonate the resolver and intercept all queries, by preventing the DDR upgrade or advertising their own DDR endpoint.
+
+These basic security properties also apply if the client uses the relaxed validation policy described in {{client-policy}}.  Nonetheless, there are some subtle but important differences in the security properties of these two policies.
 
 ## Transient attackers
 
-With the conservative validation policy, a transient on-path attacker can only intercept queries for the duration of their active presence on the network.
+With the conservative validation policy, a transient on-path attacker can only intercept queries for the duration of their active presence on the network, because the client will only send queries to the original (non-public) server IP address.
 
-With the relaxed validation behavior, a transient on-path attacker could implant a long-lived DDR response in the client's cache, directing their queries to the attacker's server long after the attacker has left the network.
+With the relaxed validation behavior, a transient on-path attacker could implant a long-lived DDR response in the client's cache, directing its queries to an attacker-controlled server on the public internet.  This would allow the attack to continue long after the attacker has left the network.
 
 ### Solution: DNR
 
@@ -117,6 +129,8 @@ The client can choose to refresh the DDR record arbitrarily frequently, e.g. by 
 ### Mitigation: Resolver reputation
 
 A relaxed-validation client might choose to accept a potential cross-forwarder upgrade only if the designated encrypted resolver has sufficient reputation, according to some proprietary reputation scheme (e.g. a locally stored list of respectable resolvers).  This limits the ability of a DDR forgery attack to cause harm.
+
+Major DoH client implementations already include lists of known resolvers {{CHROME-DOH}}{{MICROSOFT-DOH}}{{MOZILLA-TRR}}.
 
 ## Forensic logging
 
@@ -172,7 +186,11 @@ Some legacy DNS forwarders also provide a shared cache for all network users.  C
 
 ### Mitigation: Stub caches
 
-Clients can compensate partially for the loss of shared caching by implementing local DNS caches.
+Clients can compensate partially for any loss of shared caching by implementing local DNS caches.  This mitigation is already widely deployed in browsers and operating systems.
+
+## General mitigation: User controls
+
+For these and other compatibility concerns, a possible mitigation is to provide users or administrators with the ability to control whether DDR is used with legacy forwarders.  For example, this control could be provided via a general preference, or via a notification when connecting to a new network.
 
 --- back
 
