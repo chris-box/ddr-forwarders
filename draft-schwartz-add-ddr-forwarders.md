@@ -78,7 +78,7 @@ This informational document describes the interaction between DDR and legacy DNS
 
 DNS forwarders and resolvers that are implemented with awareness of DDR are out of scope, as they are not affected by this discussion (although see Security Considerations, {{security-considerations}}).
 
-# Relaxed validation client policy {#client-policy}
+# Relaxed Validation client policy {#client-policy}
 
 We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a non-public IP address, regardless of the Designated Resolver's IP address.  This client policy is otherwise identical to the one described in {{DDR}}.
 
@@ -162,7 +162,7 @@ Some network resolvers contain additional names that are not resolvable in the g
 
 ### Mitigation: NXDOMAIN Fallback
 
-In "NXDOMAIN Fallback", the client repeats a query to the unencrypted resolver if the encrypted resolver returns NXDOMAIN.  This allows the resolution of local names, provided they do not collide with globally resolvable names.
+In "NXDOMAIN Fallback", the client repeats a query to the unencrypted resolver if the encrypted resolver returns NXDOMAIN.  This allows the resolution of local names, provided they do not collide with globally resolvable names (as required by {{?RFC2826}}).
 
 This is similar to the fallback behavior currently deployed in Mozilla Firefox {{FIREFOX-FALLBACK}}.
 
