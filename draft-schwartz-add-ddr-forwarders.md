@@ -197,4 +197,4 @@ For these and other compatibility concerns, a possible mitigation is to provide 
 # Acknowledgments
 {:numbered="false"}
 
-TODO
+Thanks to Anthony Lieuallen and Eric Orth for early reviews.
