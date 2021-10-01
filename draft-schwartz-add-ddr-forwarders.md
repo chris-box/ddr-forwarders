@@ -18,6 +18,11 @@ author:
     name: Benjamin Schwartz
     organization: Google LLC
     email: bemasc@google.com
+ -
+    ins: C. Box
+    name: Chris Box
+    organization: BT
+    email: chris.box@bt.com
 
 informative:
   FIREFOX-FALLBACK:
@@ -80,7 +85,9 @@ DNS forwarders and resolvers that are implemented with awareness of DDR are out 
 
 # Relaxed Validation client policy {#client-policy}
 
-We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a non-public IP address, regardless of the Designated Resolver's IP address.  This client policy is otherwise identical to the one described in {{DDR}}.
+We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a non-public IP address, regardless of the Designated Resolver's IP address.  Instead, under this condition, the client connects using the Opportunistic Privacy Profile ({{?RFC7858, Section 4.1}}).
+
+This client policy is otherwise identical to the one described in {{Section 4 of DDR}}.
 
 # Naturally compatible behaviors
 
@@ -99,6 +106,10 @@ Certain DNS forwarders may block access to domains based on the category of serv
 ## Time of use restrictions
 
 Certain networks may impose restrictions on the time or duration of use by certain users.  This behavior is necessarily implemented below the DNS layer, because DNS-based blocking would be ineffective due to stub resolver caching, so it is not affected by changes in the DNS resolver.
+
+## Upstream resolver services
+
+The forwarder's upstream resolver might provide additional services, such as query logging or filtering.  These services are not affected by cross-forwarder upgrade.  In special cases where the upstream resolver requires cooperation from a legacy forwarder (e.g. for marking certain queries), the upstream resolver can simply choose not to deploy DDR until all cooperating forwarders have been upgraded.
 
 # Privacy Considerations
 
