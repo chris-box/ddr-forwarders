@@ -85,7 +85,9 @@ DNS forwarders and resolvers that are implemented with awareness of DDR are out 
 
 # Relaxed Validation client policy {#client-policy}
 
-We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a non-public IP address, regardless of the Designated Resolver's IP address.  Instead, under this condition, the client connects using the Opportunistic Privacy Profile ({{?RFC7858, Section 4.1}}).
+We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a non-public IP address, regardless of the Designated Resolver's IP address.  Instead, under this condition, the client connects using the Opportunistic Privacy Profile of encrypted DNS ({{?RFC7858, Section 4.1}}).
+
+The Opportunistic Privacy Profile is a broad category, including clients that "might or might not validate" the TLS certificate chain.  Certificate validation without an authentication identity conveys minimal security benefit on its own, but can be valuable in conjunction with a reputation system or a user approval step (see {{reputation}} and {{user-controls}}).
 
 This client policy is otherwise identical to the one described in {{Section 4 of DDR}}.
 
@@ -137,7 +139,7 @@ This attack does not apply if the client and network implement support for Disco
 
 The client can choose to refresh the DDR record arbitrarily frequently, e.g. by limiting the TTL.  For example, by limiting the TTL to 5 minutes, a client could ensure that any attacker can continue to monitor queries for at most 5 minutes after they have left the local network.
 
-### Mitigation: Resolver reputation
+### Mitigation: Resolver reputation {#reputation}
 
 A relaxed-validation client might choose to accept a potential cross-forwarder upgrade only if the designated encrypted resolver has sufficient reputation, according to some proprietary reputation scheme (e.g. a locally stored list of respectable resolvers).  This limits the ability of a DDR forgery attack to cause harm.
 
@@ -199,9 +201,9 @@ Some legacy DNS forwarders also provide a shared cache for all network users.  C
 
 Clients can compensate partially for any loss of shared caching by implementing local DNS caches.  This mitigation is already widely deployed in browsers and operating systems.
 
-## General mitigation: User controls
+## General mitigation: User controls {#user-controls}
 
-For these and other compatibility concerns, a possible mitigation is to provide users or administrators with the ability to control whether DDR is used with legacy forwarders.  For example, this control could be provided via a general preference, or via a notification when connecting to a new network.
+For these and other compatibility concerns, a possible mitigation is to provide users or administrators with the ability to control whether DDR is used with legacy forwarders.  For example, this control could be provided via a general preference, or via a notification upon discovering a new upstream resolver.
 
 --- back
 
