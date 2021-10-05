@@ -87,7 +87,7 @@ DNS forwarders and resolvers that are implemented with awareness of DDR are out 
 
 We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a non-public IP address, regardless of the Designated Resolver's IP address.  Instead, under this condition, the client connects using the Opportunistic Privacy Profile of encrypted DNS ({{?RFC7858, Section 4.1}}).
 
-The Opportunistic Privacy Profile is a broad category, including clients that "might or might not validate" the TLS certificate chain.  Certificate validation without an authentication identity conveys minimal security benefit on its own, but can be valuable in conjunction with a reputation system or a user approval step (see {{reputation}} and {{user-controls}}).
+The Opportunistic Privacy Profile is a broad category, including clients that "might or might not validate" the TLS certificate chain even though there is no authentication identity for the server.  This kind of validation can be valuable when combined with a reputation system or a user approval step (see {{reputation}} and {{user-controls}}).
 
 This client policy is otherwise identical to the one described in {{Section 4 of DDR}}.
 
