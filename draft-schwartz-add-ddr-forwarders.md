@@ -18,6 +18,11 @@ author:
     name: Benjamin Schwartz
     organization: Google LLC
     email: bemasc@google.com
+ -
+    ins: C. Box
+    name: Chris Box
+    organization: BT
+    email: chris.box@bt.com
 
 informative:
   FIREFOX-FALLBACK:
@@ -80,25 +85,37 @@ DNS forwarders and resolvers that are implemented with awareness of DDR are out 
 
 # Relaxed Validation client policy {#client-policy}
 
-We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a non-public IP address, regardless of the Designated Resolver's IP address.  This client policy is otherwise identical to the one described in {{DDR}}.
+We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a non-public IP address, regardless of the Designated Resolver's IP address.  Instead, under this condition, the client connects using the Opportunistic Privacy Profile of encrypted DNS ({{?RFC7858, Section 4.1}}).
+
+The Opportunistic Privacy Profile is a broad category, including clients that "might or might not validate" the TLS certificate chain even though there is no authentication identity for the server.  This kind of validation can be valuable when combined with a reputation system or a user approval step (see {{reputation}} and {{user-controls}}).
+
+This client policy is otherwise identical to the one described in {{Section 4 of DDR}}.
 
 # Naturally compatible behaviors
 
-The following network behaviors are naturally compatible with relaxed validation.
+The following system behaviors are naturally compatible with relaxed validation.
 
-## Malware and threat domain filtering
+## Compatible behaviors in the local network
+
+### Malware and threat domain filtering
 
 Certain DNS forwarders block access to domains associated with malware and other threats.  Such threats rely on frequently changing domains, so these forwarders necessarily maintain an actively curated list of domains to block.  To ensure that this service is not lost due to a cross-forwarder upgrade, the maintainers can simply add "resolver.arpa" to the list.
 
 This pattern has been deployed by Mozilla, with the domain "use-application-dns.net" {{MOZILLA-CANARY}}.
 
-## Service category restrictions
+### Service category restrictions
 
 Certain DNS forwarders may block access to domains based on the category of service provided by those domains, e.g. domains hosting services that are not appropriate for a work or school environment.  As in the previous section, this requires an actively curated list of domains, because the set of domains that offer a given type of service is constantly changing.  An actively managed blocking list can easily be revised to include "resolver.arpa".
 
-## Time of use restrictions
+### Time of use restrictions
 
 Certain networks may impose restrictions on the time or duration of use by certain users.  This behavior is necessarily implemented below the DNS layer, because DNS-based blocking would be ineffective due to stub resolver caching, so it is not affected by changes in the DNS resolver.
+
+## Upstream resolver services
+
+The forwarder's upstream resolver might provide additional services, such as filtering.  These services are generally independent of cross-forwarder upgrade, and hence naturally compatible.
+
+In special cases where the upstream resolver requires cooperation from a legacy forwarder (e.g. for marking certain queries), one solution is for the upstream resolver to choose not to deploy DDR until all cooperating forwarders have been upgraded.  Alternatively, each legacy forwarder can block "resolver.arpa" as described above.
 
 # Privacy Considerations
 
@@ -126,7 +143,7 @@ This attack does not apply if the client and network implement support for Disco
 
 The client can choose to refresh the DDR record arbitrarily frequently, e.g. by limiting the TTL.  For example, by limiting the TTL to 5 minutes, a client could ensure that any attacker can continue to monitor queries for at most 5 minutes after they have left the local network.
 
-### Mitigation: Resolver reputation
+### Mitigation: Resolver reputation {#reputation}
 
 A relaxed-validation client might choose to accept a potential cross-forwarder upgrade only if the designated encrypted resolver has sufficient reputation, according to some proprietary reputation scheme (e.g. a locally stored list of respectable resolvers).  This limits the ability of a DDR forgery attack to cause harm.
 
@@ -188,9 +205,9 @@ Some legacy DNS forwarders also provide a shared cache for all network users.  C
 
 Clients can compensate partially for any loss of shared caching by implementing local DNS caches.  This mitigation is already widely deployed in browsers and operating systems.
 
-## General mitigation: User controls
+## General mitigation: User controls {#user-controls}
 
-For these and other compatibility concerns, a possible mitigation is to provide users or administrators with the ability to control whether DDR is used with legacy forwarders.  For example, this control could be provided via a general preference, or via a notification when connecting to a new network.
+For these and other compatibility concerns, a possible mitigation is to provide users or administrators with the ability to control whether DDR is used with legacy forwarders.  For example, this control could be provided via a general preference, or via a notification upon discovering a new upstream resolver.
 
 --- back
 
