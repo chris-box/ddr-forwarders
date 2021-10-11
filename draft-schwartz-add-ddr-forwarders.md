@@ -85,6 +85,8 @@ This informational document describes the interaction between DDR and legacy DNS
 
 DNS forwarders and resolvers that are implemented with awareness of DDR are out of scope, as they are not affected by this discussion (although see Security Considerations, {{security-considerations}}).
 
+IPv6-only networks whose default DNS server has a Global Unicast Address are out of scope, even if this server is actually a simple forwarder.  If the DNS server does not use a private IP address, it is not a "legacy DNS forwarder" under this draft's definition.
+
 # Relaxed Validation client policy {#client-policy}
 
 We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a private IP address, regardless of the Designated Resolver's IP address.  Instead, under this condition, the client connects using the Opportunistic Privacy Profile of encrypted DNS ({{?RFC7858, Section 4.1}}).
