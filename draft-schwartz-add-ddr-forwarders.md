@@ -59,7 +59,9 @@ This draft describes how the Discovery of Designated Resolvers (DDR) standard in
 
 # Conventions and Definitions
 
-Legacy DNS Forwarder - An apparent DNS resolver, known to the client only by a non-public IP address, that forwards the client's queries to an upstream resolver, and has not been updated with any knowledge of DDR.
+Private IP Address - Any IP address reserved for loopback {{?RFC1122}}, link-local {{?RFC3927}}, private {{?RFC1918}}, local {{?RFC4193}}, or Carrier-Grade NAT {{?RFC6598}} use.
+
+Legacy DNS Forwarder - An apparent DNS resolver, known to the client only by a private IP address, that forwards the client's queries to an upstream resolver, and has not been updated with any knowledge of DDR.
 
 Cross-Forwarder Upgrade - Establishment of a direct, encrypted connection between the client and the upstream resolver.
 
@@ -73,7 +75,7 @@ On the topic of client validation of encrypted DNS transports, the DDR specifica
 
 > If the IP address of a Designated Resolver differs from that of an Unencrypted Resolver, clients MUST validate that the IP address of the Unencrypted Resolver is covered by the SubjectAlternativeName of the Encrypted Resolver's TLS certificate
 
-As TLS certificates cannot cover non-public IP addresses, this prevents clients that are behind a legacy DNS forwarder from connecting directly to the upstream resolver ("cross-forwarder upgrade").
+As TLS certificates cannot cover private IP addresses, this prevents clients that are behind a legacy DNS forwarder from connecting directly to the upstream resolver ("cross-forwarder upgrade").
 
 Recent estimates suggest that a large fraction, perhaps a majority, of residential internet users in the United States and Europe rely on local DNS forwarders that are not compatible with DDR.
 
@@ -83,9 +85,11 @@ This informational document describes the interaction between DDR and legacy DNS
 
 DNS forwarders and resolvers that are implemented with awareness of DDR are out of scope, as they are not affected by this discussion (although see Security Considerations, {{security-considerations}}).
 
+IPv6-only networks whose default DNS server has a Global Unicast Address are out of scope, even if this server is actually a simple forwarder.  If the DNS server does not use a private IP address, it is not a "legacy DNS forwarder" under this draft's definition.
+
 # Relaxed Validation client policy {#client-policy}
 
-We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a non-public IP address, regardless of the Designated Resolver's IP address.  Instead, under this condition, the client connects using the Opportunistic Privacy Profile of encrypted DNS ({{?RFC7858, Section 4.1}}).
+We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a private IP address, regardless of the Designated Resolver's IP address.  Instead, under this condition, the client connects using the Opportunistic Privacy Profile of encrypted DNS ({{?RFC7858, Section 4.1}}).
 
 The Opportunistic Privacy Profile is a broad category, including clients that "might or might not validate" the TLS certificate chain even though there is no authentication identity for the server.  This kind of validation can be valuable when combined with a reputation system or a user approval step (see {{reputation}} and {{user-controls}}).
 
@@ -125,19 +129,21 @@ The relaxed validation policy allows the use of encrypted transport in these con
 
 # Security Considerations {#security-considerations}
 
-When the client uses the conservative validation policy described in {{DDR}}, and a DDR-enabled resolver is identified by a non-public IP address, the client can establish a secure DDR connection only in the absence of an active attacker.  An on-path attacker can impersonate the resolver and intercept all queries, by preventing the DDR upgrade or advertising their own DDR endpoint.
+When the client uses the conservative validation policy described in {{DDR}}, and a DDR-enabled resolver is identified by a private IP address, the client can establish a secure DDR connection only in the absence of an active attacker.  An on-path attacker can impersonate the resolver and intercept all queries, by preventing the DDR upgrade or advertising their own DDR endpoint.
 
 These basic security properties also apply if the client uses the relaxed validation policy described in {{client-policy}}.  Nonetheless, there are some subtle but important differences in the security properties of these two policies.
 
 ## Transient attackers
 
-With the conservative validation policy, a transient on-path attacker can only intercept queries for the duration of their active presence on the network, because the client will only send queries to the original (non-public) server IP address.
+With the conservative validation policy, a transient on-path attacker can only intercept queries for the duration of their active presence on the network, because the client will only send queries to the original (private) server IP address.
 
 With the relaxed validation behavior, a transient on-path attacker could implant a long-lived DDR response in the client's cache, directing its queries to an attacker-controlled server on the public internet.  This would allow the attack to continue long after the attacker has left the network.
 
+Solving or mitigating this attack is of great importance for the user's security.
+
 ### Solution: DNR
 
-This attack does not apply if the client and network implement support for Discovery of Network-designated Resolvers {{?DNR=I-D.draft-ietf-add-dnr}}.
+This attack does not apply if the client and network implement support for Discovery of Network-designated Resolvers, as that mechanism takes precedence over DDR (see {{Section 3.2 of ?DNR=I-D.draft-ietf-add-dnr}}).
 
 ### Mitigation: Frequent refresh
 
@@ -185,7 +191,7 @@ This is similar to the fallback behavior currently deployed in Mozilla Firefox {
 
 NXDOMAIN Fallback results in slight changes to the security and privacy properties of encrypted DNS.  Queries for nonexistent names no longer have protection against a local passive adversary, and local names are revealed to the upstream resolver.
 
-NXDOMAIN Fallback is only applicable when a legacy DNS forwarder might be present, i.e. the unencrypted resolver has a non-public IP address, and the encrypted resolver has a different IP address.  In the other DDR configurations, any local names are expected to resolve similarly on both resolvers.
+NXDOMAIN Fallback is only applicable when a legacy DNS forwarder might be present, i.e. the unencrypted resolver has a private IP address, and the encrypted resolver has a different IP address.  In the other DDR configurations, any local names are expected to resolve similarly on both resolvers.
 
 ## Interposable domains
 
