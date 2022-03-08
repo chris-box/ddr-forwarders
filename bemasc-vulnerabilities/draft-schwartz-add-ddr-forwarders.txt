@@ -5,8 +5,8 @@
 dprive                                                       B. Schwartz
 Internet-Draft                                                Google LLC
 Intended status: Informational                                    C. Box
-Expires: 14 April 2022                                                BT
-                                                         11 October 2021
+Expires: 9 September 2022                                             BT
+                                                            8 March 2022
 
 
  Discovery of Designated Resolvers in the Presence of Legacy Forwarders
@@ -44,11 +44,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 April 2022.
+   This Internet-Draft will expire on 9 September 2022.
 
 Copyright Notice
 
-   Copyright (c) 2021 IETF Trust and the persons identified as the
+   Copyright (c) 2022 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -56,9 +56,9 @@ Copyright Notice
    license-info) in effect on the date of publication of this document.
    Please review these documents carefully, as they describe your rights
    and restrictions with respect to this document.  Code Components
-   extracted from this document must include Simplified BSD License text
-   as described in Section 4.e of the Trust Legal Provisions and are
-   provided without warranty as described in the Simplified BSD License.
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
 
 Table of Contents
 
@@ -132,7 +132,10 @@ Table of Contents
 
    Recent estimates suggest that a large fraction, perhaps a majority,
    of residential internet users in the United States and Europe rely on
-   local DNS forwarders that are not compatible with DDR.
+   local DNS forwarders that are not compatible with DDR.  It seems
+   likely that most of these forwarders will never gain DDR support,
+   which requires operating an encrypted DNS server, even if they are
+   still receiving security updates.
 
 2.2.  Scope
 
@@ -148,6 +151,10 @@ Table of Contents
    Address are out of scope, even if this server is actually a simple
    forwarder.  If the DNS server does not use a private IP address, it
    is not a "legacy DNS forwarder" under this draft's definition.
+
+   When legacy DNS forwarders as described here cease to be widely
+   deployed, this draft will no longer be relevant, and should be moved
+   to "historic" status.
 
 3.  Relaxed Validation client policy
 
@@ -282,6 +289,11 @@ Table of Contents
    Major DoH client implementations already include lists of known
    resolvers [CHROME-DOH][MICROSOFT-DOH][MOZILLA-TRR].
 
+   Reputation systems might also be combined with other relevant
+   mitigations.  For example, unrecognized resolvers might be permitted
+   subject to frequent refresh (Section 6.1.2) or user confirmation
+   (Section 7.4).
+
 6.2.  Forensic logging
 
 6.2.1.  Network-layer logging
@@ -401,16 +413,16 @@ Table of Contents
 
    [DDR]      Pauly, T., Kinnear, E., Wood, C. A., McManus, P., and T.
               Jensen, "Discovery of Designated Resolvers", Work in
-              Progress, Internet-Draft, draft-ietf-add-ddr-03, 1 October
-              2021, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              add-ddr-03>.
+              Progress, Internet-Draft, draft-ietf-add-ddr-05, 31
+              January 2022, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-add-ddr-05>.
 
    [DNR]      Boucadair, M., Reddy, T., Wing, D., Cook, N., and T.
               Jensen, "DHCP and Router Advertisement Options for the
               Discovery of Network-designated Resolvers (DNR)", Work in
-              Progress, Internet-Draft, draft-ietf-add-dnr-02, 17 May
-              2021, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              add-dnr-02>.
+              Progress, Internet-Draft, draft-ietf-add-dnr-05, 13
+              December 2021, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-add-dnr-05>.
 
    [DUCK-CNAME]
               "Force Safe Search at a Network Level", n.d.,
@@ -448,40 +460,39 @@ Table of Contents
    [RFC1122]  Braden, R., Ed., "Requirements for Internet Hosts -
               Communication Layers", STD 3, RFC 1122,
               DOI 10.17487/RFC1122, October 1989,
-              <https://datatracker.ietf.org/doc/html/rfc1122>.
+              <https://www.rfc-editor.org/rfc/rfc1122>.
 
    [RFC1918]  Rekhter, Y., Moskowitz, B., Karrenberg, D., de Groot, G.
               J., and E. Lear, "Address Allocation for Private
               Internets", BCP 5, RFC 1918, DOI 10.17487/RFC1918,
-              February 1996,
-              <https://datatracker.ietf.org/doc/html/rfc1918>.
+              February 1996, <https://www.rfc-editor.org/rfc/rfc1918>.
 
    [RFC2826]  Internet Architecture Board, "IAB Technical Comment on the
               Unique DNS Root", RFC 2826, DOI 10.17487/RFC2826, May
-              2000, <https://datatracker.ietf.org/doc/html/rfc2826>.
+              2000, <https://www.rfc-editor.org/rfc/rfc2826>.
 
    [RFC3927]  Cheshire, S., Aboba, B., and E. Guttman, "Dynamic
               Configuration of IPv4 Link-Local Addresses", RFC 3927,
               DOI 10.17487/RFC3927, May 2005,
-              <https://datatracker.ietf.org/doc/html/rfc3927>.
+              <https://www.rfc-editor.org/rfc/rfc3927>.
 
    [RFC4193]  Hinden, R. and B. Haberman, "Unique Local IPv6 Unicast
               Addresses", RFC 4193, DOI 10.17487/RFC4193, October 2005,
-              <https://datatracker.ietf.org/doc/html/rfc4193>.
+              <https://www.rfc-editor.org/rfc/rfc4193>.
 
    [RFC6598]  Weil, J., Kuarsingh, V., Donley, C., Liljenstolpe, C., and
               M. Azinger, "IANA-Reserved IPv4 Prefix for Shared Address
               Space", BCP 153, RFC 6598, DOI 10.17487/RFC6598, April
-              2012, <https://datatracker.ietf.org/doc/html/rfc6598>.
+              2012, <https://www.rfc-editor.org/rfc/rfc6598>.
 
    [RFC7258]  Farrell, S. and H. Tschofenig, "Pervasive Monitoring Is an
               Attack", BCP 188, RFC 7258, DOI 10.17487/RFC7258, May
-              2014, <https://datatracker.ietf.org/doc/html/rfc7258>.
+              2014, <https://www.rfc-editor.org/rfc/rfc7258>.
 
    [RFC7858]  Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
               and P. Hoffman, "Specification for DNS over Transport
               Layer Security (TLS)", RFC 7858, DOI 10.17487/RFC7858, May
-              2016, <https://datatracker.ietf.org/doc/html/rfc7858>.
+              2016, <https://www.rfc-editor.org/rfc/rfc7858>.
 
 Acknowledgments
 
@@ -491,11 +502,9 @@ Authors' Addresses
 
    Benjamin Schwartz
    Google LLC
-
    Email: bemasc@google.com
 
 
    Chris Box
    BT
-
    Email: chris.box@bt.com

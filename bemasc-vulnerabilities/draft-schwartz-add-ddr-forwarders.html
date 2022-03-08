@@ -10,12 +10,12 @@
 <meta content="
        This draft describes how the Discovery of Designated Resolvers (DDR) standard interacts with legacy DNS forwarders, including potential incompatibilities and relevant mitigations. 
     " name="description">
-<meta content="xml2rfc 3.10.0" name="generator">
+<meta content="xml2rfc 3.12.3" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-schwartz-add-ddr-forwarders-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.10.0
-    Python 3.9.5
+  xml2rfc 3.12.3
+    Python 3.9.7
     appdirs 1.4.4
     ConfigArgParse 1.3
     google-i18n-address 2.5.0
@@ -23,13 +23,14 @@
     intervaltree 3.1.0
     Jinja2 2.11.3
     kitchen 1.2.6
-    lxml 4.6.3
+    lxml 4.6.5
+    MarkupSafe 2.0.1
     pycountry 20.7.3
-    pyflakes 2.3.0
+    pyflakes 2.3.1
     PyYAML 5.4.1
-    requests 2.25.1
+    requests 2.26.0
     setuptools 52.0.0
-    six 1.15.0
+    six 1.16.0
 -->
 <link href="draft-schwartz-add-ddr-forwarders.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -198,7 +199,8 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-html {
+:root {
+  color-scheme: light dark;
   --background-color: #fff;
   --text-color: #222;
   --title-color: #191919;
@@ -208,20 +210,8 @@ html {
   --pilcrow-weak: #ddd;
   --pilcrow-strong: #bbb;
   --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
   scrollbar-color: #bbb #eee;
-}
-@media (prefers-color-scheme: dark) {
-html {
-  --background-color: #121212;
-  --text-color: #f0f0f0;
-  --title-color: #fff;
-  --link-color: #4da4f0;
-  --highlight-color: #282828;
-  --line-color: #444;
-  --pilcrow-weak: #444;
-  --pilcrow-strong: #666;
-  scrollbar-color: #777 #333;
-}
 }
 body {
   max-width: 600px;
@@ -238,22 +228,22 @@ body {
 }
 
 /* headings */
-#title, h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: "Cabin Condensed", sans-serif;
   font-weight: 600;
   margin: 0.8em 0 0.3em;
   font-size-adjust: 0.5;
   color: var(--title-color);
 }
-#title {
+h1#title {
   font-size: 32px;
   line-height: 40px;
   clear: both;
 }
-#title, #rfcnum {
+h1#title, h1#rfcnum {
   margin: 1.5em 0 0.2em;
 }
-#rfcnum + #title {
+h1#rfcnum + h1#title {
   margin: 0.2em 0;
 }
 
@@ -314,6 +304,10 @@ div {
 }
 svg {
   display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
 }
 .alignCenter.art-text {
   background-color: var(--highlight-color);
@@ -409,7 +403,7 @@ a.xref {
 /* Figures */
 tt, code, pre {
   background-color: var(--highlight-color);
-  font: 14px/22px 'Oxygen Mono', monospace;
+  font: 14px/22px var(--font-mono);
 }
 tt, code {
   /* changing the font for inline elements leads to different ascender
@@ -441,17 +435,22 @@ figcaption, caption {
   text-align: left;
 }
 @media screen {
-  pre {
+  pre, svg {
     display: inline-block;
     overflow-x: auto;
+  }
+  pre {
     max-width: 100%;
     width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
   }
   figure pre {
     display: block;
     width: calc(100% - 25px);
   }
-  pre + .pilcrow {
+  pre + .pilcrow, svg + .pilcrow {
     display: inline-block;
     vertical-align: text-bottom;
     padding-bottom: 8px;
@@ -465,9 +464,6 @@ aside, blockquote {
   font-style: italic;
 }
 blockquote {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
   margin: 1em 0;
 }
 cite {
@@ -638,36 +634,8 @@ hr {
 }
 
 /* index */
-.index ul {
-  margin: 0 0 0 1em;
-  padding: 0;
-  list-style: none;
-}
-.index ul ul {
-  margin: 0;
-}
-.index li {
-  margin: 0;
-  text-indent: -2em;
-  padding-left: 2em;
-  padding-bottom: 5px;
-}
-.indexIndex {
-  margin: 0.5em 0 1em;
-}
-.index a {
-  font-weight: 700;
-}
-/* make the index two-column on all but the smallest screens */
-@media (min-width: 500px) {
-  .index ul {
-    column-count: 2;
-    column-gap: 20px;
-  }
-  .index ul ul {
-    column-count: 1;
-    column-gap: 0;
-  }
+#rfc\.index\.index + ul {
+  margin-left: 0;
 }
 
 /* authors */
@@ -1010,6 +978,34 @@ address div.right {
   font-weight: bold;
   font-size: 0.9em;
 }
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+/* Trick: a prefix match works because only black and white are allowed */
+svg [stroke="black"], svg [stroke^="#000"] {
+  stroke: var(--text-color);
+}
+svg [stroke="white"], svg [stroke^="#fff"] {
+  stroke: var(--background-color);
+}
+svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+  fill: var(--text-color);
+}
+svg [stroke="fill"], svg [fill^="#fff"] {
+  fill: var(--background-color);
+}
+}
 </style>
 
 </head>
@@ -1018,11 +1014,11 @@ address div.right {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">DDR and Forwarders</td>
-<td class="right">October 2021</td>
+<td class="right">March 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Schwartz &amp; Box</td>
-<td class="center">Expires 14 April 2022</td>
+<td class="center">Expires 9 September 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1035,12 +1031,12 @@ address div.right {
 <dd class="internet-draft">draft-schwartz-add-ddr-forwarders-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-11" class="published">11 October 2021</time>
+<time datetime="2022-03-08" class="published">8 March 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-14">14 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-09-09">9 September 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1089,7 +1085,7 @@ address div.right {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 September 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1098,7 +1094,7 @@ address div.right {
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2021 IETF Trust and the persons identified as the
+            Copyright (c) 2022 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1107,9 +1103,9 @@ address div.right {
             publication of this document. Please review these documents
             carefully, as they describe your rights and restrictions with
             respect to this document. Code Components extracted from this
-            document must include Simplified BSD License text as described in
+            document must include Revised BSD License text as described in
             Section 4.e of the Trust Legal Provisions and are provided without
-            warranty as described in the Simplified BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="toc">
@@ -1263,7 +1259,7 @@ address div.right {
 </li>
         </ul>
 <p id="section-2.1-4">As TLS certificates cannot cover private IP addresses, this prevents clients that are behind a legacy DNS forwarder from connecting directly to the upstream resolver ("cross-forwarder upgrade").<a href="#section-2.1-4" class="pilcrow">¶</a></p>
-<p id="section-2.1-5">Recent estimates suggest that a large fraction, perhaps a majority, of residential internet users in the United States and Europe rely on local DNS forwarders that are not compatible with DDR.<a href="#section-2.1-5" class="pilcrow">¶</a></p>
+<p id="section-2.1-5">Recent estimates suggest that a large fraction, perhaps a majority, of residential internet users in the United States and Europe rely on local DNS forwarders that are not compatible with DDR.  It seems likely that most of these forwarders will never gain DDR support, which requires operating an encrypted DNS server, even if they are still receiving security updates.<a href="#section-2.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="scope">
@@ -1274,6 +1270,7 @@ address div.right {
 <p id="section-2.2-1">This informational document describes the interaction between DDR and legacy DNS forwarders.  It discusses possible client policies, problems that might arise, and relevant mitigations.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.2-2">DNS forwarders and resolvers that are implemented with awareness of DDR are out of scope, as they are not affected by this discussion (although see Security Considerations, <a href="#security-considerations" class="xref">Section 6</a>).<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.2-3">IPv6-only networks whose default DNS server has a Global Unicast Address are out of scope, even if this server is actually a simple forwarder.  If the DNS server does not use a private IP address, it is not a "legacy DNS forwarder" under this draft's definition.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.2-4">When legacy DNS forwarders as described here cease to be widely deployed, this draft will no longer be relevant, and should be moved to "historic" status.<a href="#section-2.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1285,7 +1282,7 @@ address div.right {
       </h2>
 <p id="section-3-1">We define a "relaxed validation" client policy as a client behavior that removes the certificate validation requirement when the Unencrypted Resolver is identified by a private IP address, regardless of the Designated Resolver's IP address.  Instead, under this condition, the client connects using the Opportunistic Privacy Profile of encrypted DNS (<span>[<a href="#RFC7858" class="xref">RFC7858</a>], <a href="https://rfc-editor.org/rfc/rfc7858#section-4.1" class="relref">Section 4.1</a></span>).<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The Opportunistic Privacy Profile is a broad category, including clients that "might or might not validate" the TLS certificate chain even though there is no authentication identity for the server.  This kind of validation can be valuable when combined with a reputation system or a user approval step (see <a href="#reputation" class="xref">Section 6.1.3</a> and <a href="#user-controls" class="xref">Section 7.4</a>).<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">This client policy is otherwise identical to the one described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-add-ddr-03#section-4" class="relref">Section 4</a> of [<a href="#DDR" class="xref">DDR</a>]</span>.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-3">This client policy is otherwise identical to the one described in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-add-ddr-05#section-4" class="relref">Section 4</a> of [<a href="#DDR" class="xref">DDR</a>]</span>.<a href="#section-3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="naturally-compatible-behaviors">
@@ -1366,10 +1363,10 @@ address div.right {
           <h4 id="name-solution-dnr">
 <a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-solution-dnr" class="section-name selfRef">Solution: DNR</a>
           </h4>
-<p id="section-6.1.1-1">This attack does not apply if the client and network implement support for Discovery of Network-designated Resolvers, as that mechanism takes precedence over DDR (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-add-dnr-02#section-3.2" class="relref">Section 3.2</a> of [<a href="#DNR" class="xref">DNR</a>]</span>).<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-1">This attack does not apply if the client and network implement support for Discovery of Network-designated Resolvers, as that mechanism takes precedence over DDR (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-add-dnr-05#section-3.2" class="relref">Section 3.2</a> of [<a href="#DNR" class="xref">DNR</a>]</span>).<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="mitigation-frequent-refresh">
+<div id="frequent-refresh">
 <section id="section-6.1.2">
           <h4 id="name-mitigation-frequent-refresh">
 <a href="#section-6.1.2" class="section-number selfRef">6.1.2. </a><a href="#name-mitigation-frequent-refresh" class="section-name selfRef">Mitigation: Frequent refresh</a>
@@ -1384,6 +1381,7 @@ address div.right {
           </h4>
 <p id="section-6.1.3-1">A relaxed-validation client might choose to accept a potential cross-forwarder upgrade only if the designated encrypted resolver has sufficient reputation, according to some proprietary reputation scheme (e.g. a locally stored list of respectable resolvers).  This limits the ability of a DDR forgery attack to cause harm.<a href="#section-6.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-6.1.3-2">Major DoH client implementations already include lists of known resolvers <span>[<a href="#CHROME-DOH" class="xref">CHROME-DOH</a>]</span><span>[<a href="#MICROSOFT-DOH" class="xref">MICROSOFT-DOH</a>]</span><span>[<a href="#MOZILLA-TRR" class="xref">MOZILLA-TRR</a>]</span>.<a href="#section-6.1.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.3-3">Reputation systems might also be combined with other relevant mitigations.  For example, unrecognized resolvers might be permitted subject to frequent refresh (<a href="#frequent-refresh" class="xref">Section 6.1.2</a>) or user confirmation (<a href="#user-controls" class="xref">Section 7.4</a>).<a href="#section-6.1.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1513,11 +1511,11 @@ address div.right {
 <dd class="break"></dd>
 <dt id="DDR">[DDR]</dt>
       <dd>
-<span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Kinnear, E.</span>, <span class="refAuthor">Wood, C. A.</span>, <span class="refAuthor">McManus, P.</span>, and <span class="refAuthor">T. Jensen</span>, <span class="refTitle">"Discovery of Designated Resolvers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-add-ddr-03</span>, <time datetime="2021-10-01" class="refDate">1 October 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-add-ddr-03">https://datatracker.ietf.org/doc/html/draft-ietf-add-ddr-03</a>&gt;</span>. </dd>
+<span class="refAuthor">Pauly, T.</span>, <span class="refAuthor">Kinnear, E.</span>, <span class="refAuthor">Wood, C. A.</span>, <span class="refAuthor">McManus, P.</span>, and <span class="refAuthor">T. Jensen</span>, <span class="refTitle">"Discovery of Designated Resolvers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-add-ddr-05</span>, <time datetime="2022-01-31" class="refDate">31 January 2022</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-add-ddr-05">https://datatracker.ietf.org/doc/html/draft-ietf-add-ddr-05</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="DNR">[DNR]</dt>
       <dd>
-<span class="refAuthor">Boucadair, M.</span>, <span class="refAuthor">Reddy, T.</span>, <span class="refAuthor">Wing, D.</span>, <span class="refAuthor">Cook, N.</span>, and <span class="refAuthor">T. Jensen</span>, <span class="refTitle">"DHCP and Router Advertisement Options for the Discovery of Network-designated Resolvers (DNR)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-add-dnr-02</span>, <time datetime="2021-05-17" class="refDate">17 May 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-add-dnr-02">https://datatracker.ietf.org/doc/html/draft-ietf-add-dnr-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Boucadair, M.</span>, <span class="refAuthor">Reddy, T.</span>, <span class="refAuthor">Wing, D.</span>, <span class="refAuthor">Cook, N.</span>, and <span class="refAuthor">T. Jensen</span>, <span class="refTitle">"DHCP and Router Advertisement Options for the Discovery of Network-designated Resolvers (DNR)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-add-dnr-05</span>, <time datetime="2021-12-13" class="refDate">13 December 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-add-dnr-05">https://datatracker.ietf.org/doc/html/draft-ietf-add-dnr-05</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="DUCK-CNAME">[DUCK-CNAME]</dt>
       <dd>
@@ -1545,35 +1543,35 @@ address div.right {
 <dd class="break"></dd>
 <dt id="RFC1122">[RFC1122]</dt>
       <dd>
-<span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Communication Layers"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1122</span>, <span class="seriesInfo">DOI 10.17487/RFC1122</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc1122">https://datatracker.ietf.org/doc/html/rfc1122</a>&gt;</span>. </dd>
+<span class="refAuthor">Braden, R., Ed.</span>, <span class="refTitle">"Requirements for Internet Hosts - Communication Layers"</span>, <span class="seriesInfo">STD 3</span>, <span class="seriesInfo">RFC 1122</span>, <span class="seriesInfo">DOI 10.17487/RFC1122</span>, <time datetime="1989-10" class="refDate">October 1989</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1122">https://www.rfc-editor.org/rfc/rfc1122</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC1918">[RFC1918]</dt>
       <dd>
-<span class="refAuthor">Rekhter, Y.</span>, <span class="refAuthor">Moskowitz, B.</span>, <span class="refAuthor">Karrenberg, D.</span>, <span class="refAuthor">de Groot, G. J.</span>, and <span class="refAuthor">E. Lear</span>, <span class="refTitle">"Address Allocation for Private Internets"</span>, <span class="seriesInfo">BCP 5</span>, <span class="seriesInfo">RFC 1918</span>, <span class="seriesInfo">DOI 10.17487/RFC1918</span>, <time datetime="1996-02" class="refDate">February 1996</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc1918">https://datatracker.ietf.org/doc/html/rfc1918</a>&gt;</span>. </dd>
+<span class="refAuthor">Rekhter, Y.</span>, <span class="refAuthor">Moskowitz, B.</span>, <span class="refAuthor">Karrenberg, D.</span>, <span class="refAuthor">de Groot, G. J.</span>, and <span class="refAuthor">E. Lear</span>, <span class="refTitle">"Address Allocation for Private Internets"</span>, <span class="seriesInfo">BCP 5</span>, <span class="seriesInfo">RFC 1918</span>, <span class="seriesInfo">DOI 10.17487/RFC1918</span>, <time datetime="1996-02" class="refDate">February 1996</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1918">https://www.rfc-editor.org/rfc/rfc1918</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2826">[RFC2826]</dt>
       <dd>
-<span class="refAuthor">Internet Architecture Board</span>, <span class="refTitle">"IAB Technical Comment on the Unique DNS Root"</span>, <span class="seriesInfo">RFC 2826</span>, <span class="seriesInfo">DOI 10.17487/RFC2826</span>, <time datetime="2000-05" class="refDate">May 2000</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc2826">https://datatracker.ietf.org/doc/html/rfc2826</a>&gt;</span>. </dd>
+<span class="refAuthor">Internet Architecture Board</span>, <span class="refTitle">"IAB Technical Comment on the Unique DNS Root"</span>, <span class="seriesInfo">RFC 2826</span>, <span class="seriesInfo">DOI 10.17487/RFC2826</span>, <time datetime="2000-05" class="refDate">May 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2826">https://www.rfc-editor.org/rfc/rfc2826</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC3927">[RFC3927]</dt>
       <dd>
-<span class="refAuthor">Cheshire, S.</span>, <span class="refAuthor">Aboba, B.</span>, and <span class="refAuthor">E. Guttman</span>, <span class="refTitle">"Dynamic Configuration of IPv4 Link-Local Addresses"</span>, <span class="seriesInfo">RFC 3927</span>, <span class="seriesInfo">DOI 10.17487/RFC3927</span>, <time datetime="2005-05" class="refDate">May 2005</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc3927">https://datatracker.ietf.org/doc/html/rfc3927</a>&gt;</span>. </dd>
+<span class="refAuthor">Cheshire, S.</span>, <span class="refAuthor">Aboba, B.</span>, and <span class="refAuthor">E. Guttman</span>, <span class="refTitle">"Dynamic Configuration of IPv4 Link-Local Addresses"</span>, <span class="seriesInfo">RFC 3927</span>, <span class="seriesInfo">DOI 10.17487/RFC3927</span>, <time datetime="2005-05" class="refDate">May 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3927">https://www.rfc-editor.org/rfc/rfc3927</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC4193">[RFC4193]</dt>
       <dd>
-<span class="refAuthor">Hinden, R.</span> and <span class="refAuthor">B. Haberman</span>, <span class="refTitle">"Unique Local IPv6 Unicast Addresses"</span>, <span class="seriesInfo">RFC 4193</span>, <span class="seriesInfo">DOI 10.17487/RFC4193</span>, <time datetime="2005-10" class="refDate">October 2005</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc4193">https://datatracker.ietf.org/doc/html/rfc4193</a>&gt;</span>. </dd>
+<span class="refAuthor">Hinden, R.</span> and <span class="refAuthor">B. Haberman</span>, <span class="refTitle">"Unique Local IPv6 Unicast Addresses"</span>, <span class="seriesInfo">RFC 4193</span>, <span class="seriesInfo">DOI 10.17487/RFC4193</span>, <time datetime="2005-10" class="refDate">October 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4193">https://www.rfc-editor.org/rfc/rfc4193</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6598">[RFC6598]</dt>
       <dd>
-<span class="refAuthor">Weil, J.</span>, <span class="refAuthor">Kuarsingh, V.</span>, <span class="refAuthor">Donley, C.</span>, <span class="refAuthor">Liljenstolpe, C.</span>, and <span class="refAuthor">M. Azinger</span>, <span class="refTitle">"IANA-Reserved IPv4 Prefix for Shared Address Space"</span>, <span class="seriesInfo">BCP 153</span>, <span class="seriesInfo">RFC 6598</span>, <span class="seriesInfo">DOI 10.17487/RFC6598</span>, <time datetime="2012-04" class="refDate">April 2012</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc6598">https://datatracker.ietf.org/doc/html/rfc6598</a>&gt;</span>. </dd>
+<span class="refAuthor">Weil, J.</span>, <span class="refAuthor">Kuarsingh, V.</span>, <span class="refAuthor">Donley, C.</span>, <span class="refAuthor">Liljenstolpe, C.</span>, and <span class="refAuthor">M. Azinger</span>, <span class="refTitle">"IANA-Reserved IPv4 Prefix for Shared Address Space"</span>, <span class="seriesInfo">BCP 153</span>, <span class="seriesInfo">RFC 6598</span>, <span class="seriesInfo">DOI 10.17487/RFC6598</span>, <time datetime="2012-04" class="refDate">April 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6598">https://www.rfc-editor.org/rfc/rfc6598</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7258">[RFC7258]</dt>
       <dd>
-<span class="refAuthor">Farrell, S.</span> and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Pervasive Monitoring Is an Attack"</span>, <span class="seriesInfo">BCP 188</span>, <span class="seriesInfo">RFC 7258</span>, <span class="seriesInfo">DOI 10.17487/RFC7258</span>, <time datetime="2014-05" class="refDate">May 2014</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc7258">https://datatracker.ietf.org/doc/html/rfc7258</a>&gt;</span>. </dd>
+<span class="refAuthor">Farrell, S.</span> and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Pervasive Monitoring Is an Attack"</span>, <span class="seriesInfo">BCP 188</span>, <span class="seriesInfo">RFC 7258</span>, <span class="seriesInfo">DOI 10.17487/RFC7258</span>, <time datetime="2014-05" class="refDate">May 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7258">https://www.rfc-editor.org/rfc/rfc7258</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7858">[RFC7858]</dt>
     <dd>
-<span class="refAuthor">Hu, Z.</span>, <span class="refAuthor">Zhu, L.</span>, <span class="refAuthor">Heidemann, J.</span>, <span class="refAuthor">Mankin, A.</span>, <span class="refAuthor">Wessels, D.</span>, and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Specification for DNS over Transport Layer Security (TLS)"</span>, <span class="seriesInfo">RFC 7858</span>, <span class="seriesInfo">DOI 10.17487/RFC7858</span>, <time datetime="2016-05" class="refDate">May 2016</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc7858">https://datatracker.ietf.org/doc/html/rfc7858</a>&gt;</span>. </dd>
+<span class="refAuthor">Hu, Z.</span>, <span class="refAuthor">Zhu, L.</span>, <span class="refAuthor">Heidemann, J.</span>, <span class="refAuthor">Mankin, A.</span>, <span class="refAuthor">Wessels, D.</span>, and <span class="refAuthor">P. Hoffman</span>, <span class="refTitle">"Specification for DNS over Transport Layer Security (TLS)"</span>, <span class="seriesInfo">RFC 7858</span>, <span class="seriesInfo">DOI 10.17487/RFC7858</span>, <time datetime="2016-05" class="refDate">May 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7858">https://www.rfc-editor.org/rfc/rfc7858</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
