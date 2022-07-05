@@ -132,7 +132,7 @@ The client can also use the encrypted service for a limited time, as a means of 
 
 Certain local DNS forwarders block access to domains associated with malware and other threats. Others block based on the category of service provided by those domains, e.g. domains hosting services that are not appropriate for a work or school environment. In the short term to ensure this service is not lost due to a cross-forwarder upgrade, the maintainers can simply add "resolver.arpa" to their actively curated list of domains to block. This pattern has been deployed by Mozilla, with the domain "use-application-dns.net" {{MOZILLA-CANARY}}.
 
-In the long term, it is best for filtering providers to implement support for encrypted DNS. The following subsections describe some ways to implement this.
+In the long term, it is best for filtering DNS forwarders to implement support for encrypted DNS. The following subsections describe some ways to implement this.
 
 ## Local implementation with DNR
 
