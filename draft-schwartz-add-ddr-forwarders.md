@@ -136,7 +136,7 @@ In the long term, it is best for filtering providers to implement support for en
 
 ## Local implementation with DNR
 
-The local forwarder can be upgraded to one that implements an encrypted DNS service discoverable through DNR. This requires a TLS certificate on the local device, proving ownership of the chosen ADN. Onward queries to the internet should also be protected with encryption.
+The local forwarder can be upgraded to one that implements an encrypted DNS service discoverable through DNR. This requires a TLS certificate on the local device, proving ownership of the chosen Authentication Domain Name (ADN). Onward queries to the internet SHOULD also be protected with encryption.
 
 ## Local implementation with DDR
 
