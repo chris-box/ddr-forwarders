@@ -58,7 +58,7 @@ informative:
 
 --- abstract
 
-This draft describes a modification to the Discovery of Designated Resolvers (DDR) standard, enabling use of encrypted DNS in the presence of legacy DNS forwarders.
+This draft describes an extension to the Discovery of Designated Resolvers (DDR) standard, enabling use of encrypted DNS in the presence of legacy DNS forwarders.
 
 --- middle
 
