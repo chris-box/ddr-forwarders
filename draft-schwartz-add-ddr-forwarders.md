@@ -66,7 +66,7 @@ This draft describes an extension to the Discovery of Designated Resolvers (DDR)
 
 The Discovery of Designated Resolvers specification {{?DDR=I-D.draft-ietf-add-ddr}} describes a mechanism for clients to learn about the encrypted protocols supported by a DNS server.  It also describes a client validation policy that has strong security properties.
 
-Recent estimates suggest that a large fraction, perhaps a majority, of residential internet users in the United States and Europe rely on local DNS forwarders that are not compatible with DDR. This is because they are accessed via a private IP address, which TLS certificates cannot prove ownership of. Many such devices also face significant hurdles in being upgraded to support encrypted DNS. So it is likely that a large installed base of legacy DNS forwarders, providing Do53 on a private IP address, will remain for some years.
+Recent estimates suggest that a large fraction, perhaps a majority, of residential internet users in the United States and Europe rely on local DNS forwarders that are not compatible with DDR. This is because they are accessed via a private IP address, which TLS certificates cannot normally prove ownership of. Many such devices also face significant hurdles in being upgraded to support encrypted DNS, so it is likely that a large installed base of legacy DNS forwarders, providing Do53 on a private IP address, will remain for some years.
 
 A client in such a network that wants to use the network's DNS resolver is forced to use Do53. It is therefore vulnerable to attacks both on the local network, and between this network and the upstream provider.
 
