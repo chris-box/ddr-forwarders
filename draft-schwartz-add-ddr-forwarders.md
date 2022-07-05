@@ -186,7 +186,7 @@ Clients can compensate partially for any loss of shared caching by implementing 
 
 The conservative validation policy results in no encryption when a legacy DNS forwarder is present.  This leaves the user's query activity vulnerable to passive monitoring {{?RFC7258}}, either on the local network or between the user and the upstream resolver.
 
-Reputation validated selection enables the use of encrypted transport in these configurations, reducing exposure to a passive surveillance adversary.
+Reputation Validated Selection enables the use of encrypted transport in these configurations, reducing exposure to a passive surveillance adversary.
 
 # Security Considerations {#security-considerations}
 
