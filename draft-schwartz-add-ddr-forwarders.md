@@ -100,7 +100,7 @@ Cross-Forwarder Upgrade - Establishment and use of a direct, encrypted connectio
 
 On receipt of an answer to the _dns.resolver.arpa query, the client scans the available access methods and for each one extracts the offered Authentication Domain Name (ADN). Each ADN is then checked to see if it has sufficient reputation, according to a reputation scheme (e.g. a locally stored list of respectable resolvers). The particular choice of scheme is not prescribed (see {{reputation-systems}}) and is a decision for the client.
 
-Assessing reputation limits the ability of a DDR forgery attack to cause harm, as it will only allow an attacker to direct clients to a resolver they consider trustworthy. Major DoH client implementations already include lists of known resolvers {{CHROME-DOH}}{{MICROSOFT-DOH}}{{MOZILLA-TRR}}.
+Assessing reputation limits the ability of a DDR forgery attack to cause harm, as it will only allow an attacker to direct clients to a resolver they consider trustworthy. Major DoH client implementations already include lists of known or trusted resolvers {{CHROME-DOH}}{{MICROSOFT-DOH}}{{MOZILLA-TRR}}.
 
 If no ADNs pass the reputation check, the client must not proceed.
 
