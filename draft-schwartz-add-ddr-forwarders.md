@@ -220,7 +220,7 @@ DNS-layer forensic logging conducted by a legacy DNS forwarder would be lost in 
 
 #### Solution: Plan to upgrade
 
-Forwarders that want to observe all queries from RVS clients should plan to implement DNR, or DDR with a public IP. In the short term it is possible for the forwarder to disable DDR by responding negatively to _dns.resolver.arpa but this is not recommended long-term as it lacks confidentiality and integrity.
+Forwarders that want to observe all queries from RVS clients should plan to implement DDR or DNR. In the short term it is possible for the forwarder to disable DDR by responding negatively to _dns.resolver.arpa but this is not recommended long-term as it prevents confidentiality protection.
 
 ## Per-device observation
 
