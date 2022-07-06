@@ -1,5 +1,5 @@
 ---
-title: "Discovery of Designated Resolvers in the Presence of Legacy Forwarders"
+title: "Reputation Verified Selection of Upstream Encrypted Resolvers"
 abbrev: "DDR and Forwarders"
 docname: draft-schwartz-add-ddr-forwarders-latest
 category: info
