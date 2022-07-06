@@ -140,7 +140,7 @@ The local forwarder can be upgraded to one that implements an encrypted DNS serv
 
 ## Local implementation with DDR
 
-If the local forwarder can be upgraded to offer an encrypted DNS service, this can then be made discoverable through classic DDR. If the device has a private IP (as presumed for RVS), a self-signed certificate is sufficient. Onward queries to the internet SHOULD also be protected with encryption.
+If the local forwarder can be upgraded to offer an encrypted DNS service, this can then be made discoverable through classic DDR. If the device has a private IP (as presumed for RVS), a self-signed certificate is sufficient as long as the client supports the Opportunistic Discovery mode of DDR. Onward queries to the internet SHOULD also be protected with encryption.
 
 ## Move upstream
 
