@@ -108,7 +108,9 @@ Reputation Verified Selection (RVS) is a method for validating whether connectio
 1. The client determines the reputation of each Resolver Identity derived from the certificate.
 1. The maximum (i.e. most favorable) reputation is the reputation of this connection.
 
-> TODO: Consider using the SVCB TargetName to select a single Resolver Identity.  Does this require the use of SNI?
+> OPEN QUESTION: Would it be better to use the SVCB TargetName to select a single Resolver Identity?  This would avoid the need to enumerate the certificate's names, but it would require the use of SNI (unlike standard DDR), and would not be compatible with all upstream encrypted resolvers.
+
+> OPEN QUESTION: Can we simplify the resolver identity to just a domain name?  This would make reputation systems easier, but it would not allow distinct reputation for different colocated resolution services, so reputation providers would have to be sure that no approved resolver has other interesting colocated services.
 
 This process MUST be repeated whenever a new TLS session is established, but reputation scores for each resolver endpoint MAY be cached.
 
@@ -128,9 +130,7 @@ Successful validation then permits cross-forwarder upgrade.
 
 Embedding a list of known trusted resolvers in a client is only one possible model for assessing the reputation of a resolver. In future a range of online reputation services might be available to be queried, each returning an answer according to their own specific criteria. These might involve answers on other properties such as jurisdiction, or certification by a particular body. It is out of scope for this document to define these query methods, other than to note that designers should be aware of bootstrapping problems. It is the client's decision as to how to combine these answers, possibly using additional metadata (e.g. location), to make a determination of reputation.
 
-### Granularity of reputation system
 
-This document is written using the assumption that ADN is the finest grained key for which it is useful to have a reputation value. With DoH it is possible to have multiple independent services at different URI paths, and with DoT and DoQ it is possible to separate by port. {{NEXTDNS}} is an example of DoH URI separation, with one path per customer, dynamically provisioned. It is an open question whether it is useful to be able to query, and provide, multiple reputations per ADN. If that is answered with yes, references to ADN in this document will need to be updated appropriately. If answered no, ADN reputations must be defined based on the worst-case service offered at that name.
 
 ## Using resolvers of intermediate reputation
 
