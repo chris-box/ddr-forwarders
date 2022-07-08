@@ -106,7 +106,7 @@ If no resolvers pass the reputation check, the client must not proceed.
 
 Clients SHOULD start by checking the resolver endpoint with the numerically lowest SVCB SvcPriority.  Clients MAY wait until a DNS query triggers an Encrypted DNS connection attempt before performing this verification.
 
-The client now possesses a chosen ADN and a set of access methods for reaching the ADN's encrypted DNS services. Once successfully connected to one of these services, it must validate the offered TLS certificate so that it can be confident that the upstream server knows the private key for the Authentication Domain Name. It must also check that the TLS certificate of the resolver contains the ADN in a subjectAltName extension. If the validation fails either of these, the client must not proceed.
+If RVS encounters an error or rejects the server, the client MUST fall back to plaintext DNS on port 53.
 
 Successful validation then permits cross-forwarder upgrade.
 
