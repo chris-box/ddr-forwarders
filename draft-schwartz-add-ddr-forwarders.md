@@ -98,7 +98,21 @@ Cross-Forwarder Upgrade - Establishment and use of a direct, encrypted connectio
 
 # Reputation Verified Selection (RVS) {#client-policy}
 
-On receipt of an answer to the _dns.resolver.arpa query, the client scans the available access methods and for each one extracts the offered Authentication Domain Name (ADN). Each ADN is then checked to see if it has sufficient reputation, according to a reputation scheme (e.g. a locally stored list of respectable resolvers). The particular choice of scheme is not prescribed (see {{reputation-systems}}) and is a decision for the client.
+Reputation Verified Selection (RVS) is a method for validating whether connection using DDR is allowed.  Clients MAY use RVS when (a) the local DNS server is identified by a Private IP address and (b) the DDR SVCB resolution process does not produce any Encrypted DNS endpoints that have this IP address in their A or AAAA records.  RVS then proceeds as follows:
+
+1. The client connects to one of the indicated Encrypted DNS endpoints.
+1. The client receives a certificate, which it verifies to a suitable root of trust.
+1. For each identity (e.g. SubjectAltName) in the certificate, the client constructs a Resolver Identity:
+  a. For DNS over TLS and DNS over QUIC, the Resolver Identity is an IP address or hostname and the port number used for the connection.
+  b. For DNS over HTTPS, the Resolver Identity is a URI Template in absolute form, containing the port number used for the connection and path indicated by `dohpath`.
+1. The client determines the reputation of each Resolver Identity derived from the certificate.
+1. The maximum (i.e. most favorable) reputation is the reputation of this connection.
+
+> TODO: Consider using the SVCB TargetName to select a single Resolver Identity.  Does this require the use of SNI?
+
+This process MUST be repeated whenever a new TLS session is established, but reputation scores for each resolver endpoint MAY be cached.
+
+For DNS over HTTPS, the `:authority` pseudo-header MUST reflect the Resolver Identity with the most favorable reputation, to ensure that the HTTP requests are well-formed and are directed to the intended service.  If the Resolver Identity is a wildcard, the reputation system MUST replace it with a valid hostname that matches the wildcard.
 
 Assessing reputation limits the ability of a DDR forgery attack to cause harm, as it will only allow an attacker to direct clients to a resolver they consider trustworthy. Major DoH client implementations already include lists of known or trusted resolvers {{CHROME-DOH}}{{MICROSOFT-DOH}}{{MOZILLA-TRR}}.
 
