@@ -124,7 +124,7 @@ If the determined reputation is a binary "definitely trustworthy" or "definitely
 
 The client can simply decline to the use the encrypted service. In this case, unless there is another option, the client will fall back to Do53.
 
-The client can ask the user. For this prompt the ADN may be recognizable to the user as that of an ISP. It's also possible to convey information about why the ADN lacks some element of reputation.
+The client can ask the user about specific domain names that appear in the certificate. These names might be recognizable to the user, e.g. as that of an ISP. It's also possible to convey information about why the ADN lacks some element of reputation.
 
 The client can also use the encrypted service for a limited time, as a means of mitigating. By limiting the DDR response TTL to 5 minutes, a client can ensure that any attacker can continue to monitor queries for at most 5 minutes after they have left the local network.
 
