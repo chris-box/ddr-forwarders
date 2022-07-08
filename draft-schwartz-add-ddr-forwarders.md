@@ -102,7 +102,7 @@ On receipt of an answer to the _dns.resolver.arpa query, the client scans the av
 
 Assessing reputation limits the ability of a DDR forgery attack to cause harm, as it will only allow an attacker to direct clients to a resolver they consider trustworthy. Major DoH client implementations already include lists of known or trusted resolvers {{CHROME-DOH}}{{MICROSOFT-DOH}}{{MOZILLA-TRR}}.
 
-If no ADNs pass the reputation check, the client must not proceed.
+If no resolvers pass the reputation check, the client must not proceed.
 
 From the set that have passed, the client should choose the one with numerically lowest SVCB SvcPriority, but may choose any that pass. If the SvcPriority is zero (AliasMode) the client follows the alias to the TargetName as described in {{?SVCB=I-D.draft-ietf-dnsop-svcb-https}}, generating a new SVCB query if needed.
 
